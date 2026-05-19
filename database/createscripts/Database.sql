@@ -5,7 +5,7 @@ CREATE DATABASE assignment_7;
 USE assignment_7;
 
 CREATE TABLE VehicleType (
-    Id                 INTEGER      NOT NULL PRIMARY KEY AUTO_INCREMENT
+    Id                 INT      NOT NULL PRIMARY KEY AUTO_INCREMENT
     ,VehicleType        VARCHAR(50)  NOT NULL
     ,LicenseCategory    CHAR(3)      NOT NULL
     ,IsActive           BOOLEAN      NOT NULL DEFAULT 1
@@ -15,12 +15,12 @@ CREATE TABLE VehicleType (
     );
 
 CREATE TABLE Vehicle (
-    Id               INTEGER      NOT NULL PRIMARY KEY AUTO_INCREMENT
+    Id               INT      NOT NULL PRIMARY KEY AUTO_INCREMENT
     ,LicensePlate     VARCHAR(10)  NOT NULL UNIQUE
     ,Model            VARCHAR(50)  NOT NULL
     ,YearOfManufacture DATE        NOT NULL
     ,FuelType         VARCHAR(20)  NOT NULL 
-    ,VehicleTypeId    INTEGER      NOT NULL
+    ,VehicleTypeId    INT      NOT NULL
     ,IsActive         BOOLEAN      NOT NULL DEFAULT 1
     ,Remark           VARCHAR(255)
     ,CreatedDate      DATETIME(6)  NOT NULL DEFAULT NOW(6)
@@ -29,13 +29,13 @@ CREATE TABLE Vehicle (
 );
 
 CREATE TABLE Instructor (
-    Id              INTEGER      NOT NULL PRIMARY KEY AUTO_INCREMENT
+    Id              INT      NOT NULL PRIMARY KEY AUTO_INCREMENT
     ,FirstName       VARCHAR(50)  NOT NULL
     ,MiddleName      VARCHAR(20)
     ,LastName        VARCHAR(100) NOT NULL
     ,Mobile          VARCHAR(15)  NOT NULL UNIQUE
     ,StartDate       DATE         NOT NULL
-    ,NumberOfStars   INTEGER      NOT NULL DEFAULT 1 CHECK (NumberOfStars BETWEEN 1 AND 5)
+    ,NumberOfStars   INT      NOT NULL DEFAULT 1 CHECK (NumberOfStars BETWEEN 1 AND 5)
     ,IsActive        BOOLEAN      NOT NULL DEFAULT 1
     ,Remark          VARCHAR(255)
     ,CreatedDate     DATETIME(6)  NOT NULL DEFAULT NOW(6)
@@ -43,9 +43,9 @@ CREATE TABLE Instructor (
 );
 
 CREATE TABLE VehicleInstructor (
-    Id              INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT
-    ,VehicleId       INTEGER NOT NULL
-    ,InstructorId    INTEGER NOT NULL
+    Id              INT NOT NULL PRIMARY KEY AUTO_INCREMENT
+    ,VehicleId       INT NOT NULL
+    ,InstructorId    INT NOT NULL
     ,AssignmentDate  DATE    NOT NULL
     ,IsActive        BOOLEAN NOT NULL DEFAULT 1
     ,Remark          VARCHAR(255)

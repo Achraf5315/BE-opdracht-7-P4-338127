@@ -28,7 +28,7 @@
 
                     {{-- Toevoegen knop --}}
                     <div class="mb-6">
-                        <a href="{{ route('vehicle.index', ['instructorId' => $vehicles[0]->InstructorId ?? 0]) }}"
+                        <a href="{{ route('vehicle.index', ['instructorId' => $instructor->Id]) }}"
                             class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
                             Toevoegen Voertuig
                         </a>
@@ -56,7 +56,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($vehicles as $vehicle)
+                                @forelse($instructorvehicles as $vehicle)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                                     <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">
                                         {{ $vehicle->VehicleType ?? '-' }}
@@ -96,7 +96,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>

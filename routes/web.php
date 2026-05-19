@@ -20,7 +20,7 @@ Route::get('/instructor/details/{instructorId}', [InstructorController::class, '
 ->name('instructor.details');
 
 //Instructor Vehicle Edit
-Route::get('/instructor/{instructorId}/vehicle/{vehicleId}/edit', [VehicleController::class, 'edit'])
+Route::get('/vehicle/{instructorId}', [VehicleController::class, 'index'])
 ->middleware(['auth', 'verified'])
 ->name('instructor.vehicle.edit');
 
