@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Vehicle extends Model
 {
@@ -19,4 +20,9 @@ class Vehicle extends Model
         'CreatedDate',
         'ModifiedDate'
     ];
+
+    public function GetAllVehicles(): array 
+    {
+        return DB::select('CALL sp_GetAllVehicles()');
+    }
 }

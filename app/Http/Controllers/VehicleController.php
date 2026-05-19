@@ -4,15 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use App\Http\Controllers\InstructorController;
 
 class VehicleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private Vehicle $VehicleModel;
+    private InstructorController $InstructorController;
+
+    public function __construct()
     {
-        return view('vehicle.index');
+        $this->VehicleModel = new Vehicle;
+        $this->InstructorController = new InstructorController;
+    }
+
+    public function index(int $instructorId)
+    {
+        $instructor = $this->InstructorController->InstructorInformation($instructorId);
+
+        $vehicles = $this->VehicleModel->GetAllVehicles();
+
+        return view('vehicle.index', [
+            'instructor' => $instructor,
+            'vehicles' => $vehicles,
+        ]);
     }
 
     /**
@@ -42,18 +56,13 @@ class VehicleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Vehicle $vehicle)
-    {
-        
-        
-        return view('instructor.vehicle.edit', [
+    public function edit(Vehicle $vehicle) {
+
+        return view('vehicle.edit', [
             'vehicle' => $vehicle,
         ]);
+        
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Vehicle $vehicle)
     {
         //

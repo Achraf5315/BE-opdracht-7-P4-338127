@@ -77,9 +77,8 @@
                                         {{ $vehicle->LicenseCategory ?? '-' }}
                                     </td>
                                     <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
-                                        <a href="{{ route('instructor.vehicle.edit', [
+                                        <a href="{{ route('vehicle.index', [
                                             'instructorId' => $vehicle->InstructorId,
-                                            'vehicleId' => $vehicle->VehicleId,
                                         ]) }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>

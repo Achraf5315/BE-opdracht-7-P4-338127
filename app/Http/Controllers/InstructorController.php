@@ -26,9 +26,7 @@ class InstructorController extends Controller
 
     public function details(int $instructorId)
     {
-        $instructor = $this->InstructorModel->newQuery()
-            ->select(['Id', 'Firstname', 'Middlename', 'Lastname', 'StartDate', 'NumberOfStars'])
-            ->find($instructorId);
+        $instructor = $this->InstructorInformation($instructorId);
 
         
         $instructorvehicles = $this->InstructorModel->GetAllInstructorVehicles($instructorId);
@@ -37,5 +35,14 @@ class InstructorController extends Controller
             'instructor' => $instructor,
             'instructorvehicles' => $instructorvehicles,
         ]);
+    }
+
+    public function InstructorInformation(int $instructorId)
+    {
+        $instructor = $this->InstructorModel->newQuery()
+            ->select(['Id', 'Firstname', 'Middlename', 'Lastname', 'StartDate', 'NumberOfStars'])
+            ->find($instructorId);
+
+        return $instructor;
     }
 }

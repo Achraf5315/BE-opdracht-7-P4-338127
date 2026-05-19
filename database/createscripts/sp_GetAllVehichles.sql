@@ -2,10 +2,13 @@ DROP PROCEDURE IF EXISTS sp_GetAllVehichles;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_GetAllVehichles()
+CREATE PROCEDURE sp_GetAllVehichles(
+    IN p_InstructorId INT
+)
 BEGIN
-    SELECT 
+    SELECT
         v.Id,
+        i.Id AS InstructorId, 
         v.LicensePlate,
         v.Model,
         v.YearOfManufacture,
@@ -15,9 +18,13 @@ BEGIN
         v.Remark,
         v.CreatedDate,
         v.ModifiedDate
-    FROM Vehicle v;
-END$$
+    FROM Vehicle v
+    LEFT JOIN VehicleInstructor vi ON v.Id = vi.VehicleId
+    LEFT JOIN Instructor i ON vi.InstructorId = i.Id
+    WHERE vi.InstructorId = p_InstructorId;
+END $$
 
 DELIMITER ;
 
-CALL sp_GetAllVehichles();
+CALL sp_GetAllVehichles(5);
+

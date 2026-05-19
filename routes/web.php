@@ -20,12 +20,12 @@ Route::get('/instructor/details/{instructorId}', [InstructorController::class, '
 ->name('instructor.details');
 
 //Instructor Vehicle Edit
-Route::get('/vehicle/{instructorId}', [VehicleController::class, 'index'])
+Route::get('/vehicle/{instructorId}', [VehicleController::class, 'edit'])
 ->middleware(['auth', 'verified'])
-->name('instructor.vehicle.edit');
+->name('vehicle.edit');
 
 //Vehicle Read
-Route::get('/vehicle', [VehicleController::class, 'index'])
+Route::get('/vehicle/{instructorId}', [VehicleController::class, 'index'])
 ->middleware(['auth', 'verified'])
 ->name('vehicle.index');
 
