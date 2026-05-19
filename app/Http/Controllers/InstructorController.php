@@ -17,19 +17,25 @@ class InstructorController extends Controller
     {
         $instructorsCount = $this->InstructorModel->InstructorCount()->InstructorsCount ?? 0;
         $instructors = $this->InstructorModel->GetAllInstructors();
-        
+
         return view('dashboard', [
             'instructorsCount' => $instructorsCount,
-            'instructors' => $instructors
+            'instructors' => $instructors,
         ]);
     }
 
-    public function details($instructorId)
+    public function details(int $instructorId)
     {
-        $instructor = $this->InstructorModel->GetAllInstructorVehicles($instructorId);
+        $instructor = $this->InstructorModel->newQuery()
+            ->select(['Firstname', 'Middlename', 'Lastname', 'StartDate', 'NumberOfStars'])
+            ->find($instructorId);
+
+        $vehicles = $this->InstructorModel->GetAllInstructorVehicles($instructorId);
+
 
         return view('instructor.details', [
-            'instructor' => $instructor
+            'instructor' => $instructor,
+            'vehicles' => $vehicles,
         ]);
     }
 }

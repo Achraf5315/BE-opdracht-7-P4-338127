@@ -43,6 +43,7 @@ return new class extends Migration
             )
             BEGIN
                 SELECT
+                    i.Id AS InstructorId,
                     i.FullName,
                     i.StartDate,
                     i.NumberOfStars,

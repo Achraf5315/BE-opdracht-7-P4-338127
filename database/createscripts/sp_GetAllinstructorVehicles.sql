@@ -9,6 +9,7 @@ CREATE PROCEDURE sp_GetAllInstructorVehicles(
 )
 BEGIN
     SELECT
+        i.Id AS InstructorId,
         i.FullName,
         i.StartDate,
         i.NumberOfStars,

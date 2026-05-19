@@ -32,7 +32,7 @@ class Instructor extends Model
         return DB::select('CALL sp_GetAllInstructors()');
     }
 
-    public function GetAllInstructorVehicles($instructorId): array
+    public function GetAllInstructorVehicles(int $instructorId): mixed
     {
         return DB::select('CALL sp_GetAllInstructorVehicles(?)', [$instructorId]);
     }
