@@ -51,6 +51,8 @@
                                         Brandstof</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
                                         Rijbewijscategorie</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
+                                        Toevoegen</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
                                         Wijzigen</th>
                                 </tr>
@@ -77,10 +79,22 @@
                                             {{ $vehicle->LicenseCategory ?? '-' }}
                                         </td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
-                                            <a href="{{ route('vehicle.edit', ['instructorId' => $instructor->Id, 'vehicleId' => $vehicle->Id]) }}"
-                                                class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
+                                            <form method="POST"
+                                                action="{{ route('vehicle.assign', ['instructorId' => $instructor->Id, 'vehicleId' => $vehicle->Id]) }}">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
+                                            <div class="inline-flex items-center gap-2">
+                                                <a href="{{ route('vehicle.edit', ['instructorId' => $instructor->Id, 'vehicleId' => $vehicle->Id]) }}"
+                                                    class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

@@ -33,6 +33,11 @@ Route::get('/vehicle/{instructorId}', [VehicleController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('vehicle.index');
 
+// Assign available vehicle to instructor (from available vehicles list)
+Route::post('/vehicle/{instructorId}/{vehicleId}/assign', [VehicleController::class, 'assign'])
+    ->middleware(['auth', 'verified'])
+    ->name('vehicle.assign');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

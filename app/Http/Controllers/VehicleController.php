@@ -14,14 +14,14 @@ use Illuminate\View\View;
 
 class VehicleController extends Controller
 {
-    private Vehicle $VehicleModel;
+    private $VehicleModel;
 
-    private InstructorController $InstructorController;
+    private $InstructorController;
 
-    public function __construct()
+    public function __construct($vehicleModel = null, $InstructorController = null)
     {
-        $this->VehicleModel = new Vehicle;
-        $this->InstructorController = new InstructorController;
+        $this->VehicleModel = $vehicleModel ?? new Vehicle;
+        $this->InstructorController = $InstructorController ?? new InstructorController;
     }
 
     public function index(int $instructorId)
@@ -118,6 +118,13 @@ class VehicleController extends Controller
             'remark' => ['nullable', 'string', 'max:250'],
         ]);
 
+        // If vehicle already has an active assignment, prevent changing YearOfManufacture
+        $vehicleForEdit = $this->VehicleModel->GetVehicleForEdit($vehicleId);
+        if ($vehicleForEdit !== null && ! empty($vehicleForEdit->InstructorId)) {
+            // override year with stored value to ensure it's not changed
+            $validated['year_of_manufacture'] = $vehicleForEdit->YearOfManufacture;
+        }
+
         DB::transaction(function () use ($validated, $vehicleId) {
             DB::statement('CALL sp_UpdateVehicleAndAssignment(?, ?, ?, ?, ?, ?, ?, ?)', [
                 $vehicleId,
@@ -142,5 +149,35 @@ class VehicleController extends Controller
     public function destroy(Vehicle $vehicle)
     {
         //
+    }
+
+    /**
+     * Assign an available vehicle to the instructor (from the available vehicles list).
+     */
+    public function assign(Request $request, int $instructorId, int $vehicleId): RedirectResponse
+    {
+        $instructor = $this->InstructorController->InstructorInformation($instructorId);
+        abort_if($instructor === null, 404);
+
+        $vehicle = $this->VehicleModel->GetVehicleForEdit($vehicleId);
+        abort_if($vehicle === null, 404);
+
+        // Use existing vehicle data and call the stored procedure to create assignment
+        DB::transaction(function () use ($vehicle, $vehicleId, $instructorId) {
+            DB::statement('CALL sp_UpdateVehicleAndAssignment(?, ?, ?, ?, ?, ?, ?, ?)', [
+                $vehicleId,
+                $vehicle->LicensePlate,
+                $vehicle->Model,
+                $vehicle->YearOfManufacture,
+                $vehicle->FuelType,
+                $vehicle->VehicleTypeId,
+                $vehicle->Remark ?? null,
+                $instructorId,
+            ]);
+        });
+
+        return redirect()
+            ->route('instructor.details', ['instructorId' => $instructorId])
+            ->with('success', 'Voertuig is toegewezen aan de instructeur.');
     }
 }

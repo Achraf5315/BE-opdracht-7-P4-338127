@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,11 @@ class VehicleUpdateTest extends TestCase
                 'instructor_id' => null,
             ]);
 
-        $controller = new VehicleController;
+        // inject a Vehicle mock that returns null for GetVehicleForEdit
+        $vehicleModelMock = Mockery::mock(Vehicle::class)->shouldAllowMockingProtectedMethods();
+        $vehicleModelMock->shouldReceive('GetVehicleForEdit')->with(10)->andReturn((object) ['InstructorId' => null, 'YearOfManufacture' => '2022-03-21']);
+
+        $controller = new VehicleController($vehicleModelMock, new InstructorController);
         $response = $controller->update($request, 1, 10);
 
         $this->assertNotNull($response);
