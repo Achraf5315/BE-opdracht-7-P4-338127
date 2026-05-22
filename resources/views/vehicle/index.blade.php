@@ -9,6 +9,15 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if (session('success'))
+                        <div class="mb-4 rounded-lg bg-green-100 px-4 py-3 text-green-700">
+                            {{ session('success') }}
+                        </div>
+                    @elseif (session('error'))
+                        <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-red-700">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     {{-- Instructeur info --}}
                     <div class="space-y-2 mb-6">
                         <p class="text-lg">
@@ -84,6 +93,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="mt-4">
+                            {{ $vehicles->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

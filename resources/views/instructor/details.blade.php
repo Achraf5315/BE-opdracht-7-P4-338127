@@ -10,6 +10,21 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
+                    @if (session('success'))
+                        <div class="mb-4 rounded-lg bg-green-100 px-4 py-3 text-green-700">
+                            {{ session('success') }}
+                            <meta http-equiv="refresh"
+                                content="2;url={{ route('instructor.details', ['instructorId' => $instructor->Id]) }}">
+                        </div>
+                    @elseif (session('error'))
+                        <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-red-700">
+                            {{ session('error') }}
+                            <meta http-equiv="refresh"
+                                content="2;url={{ route('instructor.details', ['instructorId' => $instructor->Id]) }}">
+                        </div>
+                    @endif
+
+
                     {{-- Instructeur info --}}
                     <div class="space-y-2 mb-6">
                         <p class="text-lg">
@@ -80,8 +95,7 @@
                                                                         <a href="{{ route('vehicle.edit', [
                                         'instructorId' => $vehicle->InstructorId,
                                         'vehicleId' => $vehicle->VehicleId,
-                                    ]) }}"
-                                                                            class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                                    ]) }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
                                                                             <i class="bi bi-pencil-fill"></i>
                                                                         </a>
                                                                     </td>

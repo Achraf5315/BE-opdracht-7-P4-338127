@@ -9,6 +9,17 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if (session('success'))
+                        <div class="mb-4 rounded-lg bg-green-100 px-4 py-3 text-green-700">
+                            {{ session('success') }}
+                            <meta http-equiv="refresh" content="2;url={{ route('instructor.details', ['instructorId' => $instructorId]) }}">
+                        </div>
+                    @elseif (session('error'))
+                        <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-red-700">
+                            {{ session('error') }}
+                            <meta http-equiv="refresh" content="2;url={{ route('instructor.details', ['instructorId' => $instructorId]) }}">
+                        </div>
+                    @endif
                  
 
                     @if (isset($errors) && $errors->any())

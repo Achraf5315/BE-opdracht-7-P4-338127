@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -27,7 +28,20 @@ class VehicleController extends Controller
     {
         $instructor = $this->InstructorController->InstructorInformation($instructorId);
 
-        $vehicles = $this->VehicleModel->GetAvailableVehicles();
+        $allVehicles = $this->VehicleModel->GetAvailableVehicles();
+
+        $perPage = 4;
+        $page = (int) request()->get('page', 1);
+        $offset = ($page - 1) * $perPage;
+        $items = array_slice($allVehicles, $offset, $perPage);
+
+        $vehicles = new LengthAwarePaginator(
+            $items,
+            count($allVehicles),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('vehicle.index', [
             'instructor' => $instructor,
@@ -119,7 +133,7 @@ class VehicleController extends Controller
 
         return redirect()
             ->route('instructor.details', ['instructorId' => $instructorId])
-            ->with('status', 'Voertuiggegevens zijn gewijzigd.');
+            ->with('success', 'Voertuiggegevens zijn gewijzigd.');
     }
 
     /**
