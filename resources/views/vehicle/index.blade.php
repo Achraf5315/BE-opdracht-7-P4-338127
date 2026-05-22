@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Door Instructeur gebruikte voertuigen
+            Alle beschikbare voertuigen
         </h2>
     </x-slot>
 
@@ -9,7 +9,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-
                     {{-- Instructeur info --}}
                     <div class="space-y-2 mb-6">
                         <p class="text-lg">
@@ -26,14 +25,6 @@
                         </p>
                     </div>
 
-                    {{-- Toevoegen knop --}}
-                    <div class="mb-6">
-                        <a href="{{ route('vehicle.index', ['instructorId' => $instructor->Id]) }}"
-                            class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                            Toevoegen Voertuig
-                        </a>
-                    </div>
-
                     {{-- Voertuigen tabel --}}
                     <div class="mt-4">
                         <table class="w-full border-collapse border border-gray-300 dark:border-gray-600">
@@ -42,7 +33,7 @@
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
                                         Type Voertuig</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                                        Model</th>
+                                        Type</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
                                         Kenteken</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
@@ -51,8 +42,6 @@
                                         Brandstof</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
                                         Rijbewijscategorie</th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                                        Toevoegen</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
                                         Wijzigen</th>
                                 </tr>
@@ -79,13 +68,8 @@
                                             {{ $vehicle->LicenseCategory ?? '-' }}
                                         </td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
-                                            <a href="{{ route('instructor.vehicle.edit', ['instructorId' => $vehicle->InstructorId, 'vehicleId' => $vehicle->VehicleId]) }}"
+                                            <a href="{{ route('vehicle.edit', ['instructorId' => $instructor->Id, 'vehicleId' => $vehicle->Id]) }}"
                                                 class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                        </td>
-                                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
-                                            <a href="{{ route('instructor.vehicle.edit', ['instructorId' => $vehicle->InstructorId, 'vehicleId' => $vehicle->VehicleId]) }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                         </td>

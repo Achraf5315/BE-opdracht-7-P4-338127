@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Vehicle extends Model
 {
     protected $table = 'Vehicle';
+
     protected $primaryKey = 'Id';
+
     protected $fillable = [
         'LicensePlate',
         'Model',
@@ -18,11 +20,26 @@ class Vehicle extends Model
         'IsActive',
         'Remark',
         'CreatedDate',
-        'ModifiedDate'
+        'ModifiedDate',
     ];
 
-    public function GetAllVehicles(): array 
+    public function GetAllVehicles(int $InstructorId): array
     {
-        return DB::select('CALL sp_GetAllVehicles()');
+        return DB::select('CALL sp_GetAllVehicles(?)', [$InstructorId]);
+    }
+
+    public function GetAvailableVehicles(): array
+    {
+        return DB::select('CALL sp_GetAvailableVehicles()');
+    }
+
+    public function GetVehicleForEdit(int $vehicleId): ?object
+    {
+        $rows = DB::select('CALL sp_GetVehicleForEdit(?)', [$vehicleId]);
+        if (empty($rows)) {
+            return null;
+        }
+
+        return $rows[0];
     }
 }

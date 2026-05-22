@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instructor;
 use App\Models\Vehicle;
+use App\Models\VehicleType;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\InstructorController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class VehicleController extends Controller
 {
     private Vehicle $VehicleModel;
+
     private InstructorController $InstructorController;
 
     public function __construct()
@@ -21,7 +27,7 @@ class VehicleController extends Controller
     {
         $instructor = $this->InstructorController->InstructorInformation($instructorId);
 
-        $vehicles = $this->VehicleModel->GetAllVehicles();
+        $vehicles = $this->VehicleModel->GetAvailableVehicles();
 
         return view('vehicle.index', [
             'instructor' => $instructor,
@@ -56,16 +62,64 @@ class VehicleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Vehicle $vehicle) {
+    public function edit(int $instructorId, int $vehicleId): View
+    {
+        $vehicle = $this->VehicleModel->GetVehicleForEdit($vehicleId);
+
+        abort_if($vehicle === null, 404);
 
         return view('vehicle.edit', [
+            'instructorId' => $instructorId,
+            'vehicleId' => $vehicleId,
             'vehicle' => $vehicle,
+            'instructors' => Instructor::query()
+                ->select(['Id', 'FirstName', 'MiddleName', 'LastName'])
+                ->where('IsActive', 1)
+                ->orderBy('FirstName')
+                ->orderBy('LastName')
+                ->get(),
+            'vehicleTypes' => VehicleType::query()
+                ->select(['Id', 'VehicleType', 'LicenseCategory'])
+                ->where('IsActive', 1)
+                ->orderBy('LicenseCategory')
+                ->get(),
+            'fuelTypes' => ['Benzine', 'Diesel', 'Elektrisch'],
         ]);
-        
     }
-    public function update(Request $request, Vehicle $vehicle)
+
+    public function update(Request $request, int $instructorId, int $vehicleId): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'license_plate' => [
+                'required',
+                'string',
+                'max:10',
+                Rule::unique('Vehicle', 'LicensePlate')->ignore($vehicleId, 'Id'),
+            ],
+            'model' => ['required', 'string', 'max:50'],
+            'year_of_manufacture' => ['required', 'date'],
+            'fuel_type' => ['required', Rule::in(['Benzine', 'Diesel', 'Elektrisch'])],
+            'vehicle_type_id' => ['required', 'integer', Rule::exists('VehicleType', 'Id')],
+            'instructor_id' => ['nullable', 'integer', Rule::exists('Instructor', 'Id')],
+            'remark' => ['nullable', 'string', 'max:250'],
+        ]);
+
+        DB::transaction(function () use ($validated, $vehicleId) {
+            DB::statement('CALL sp_UpdateVehicleAndAssignment(?, ?, ?, ?, ?, ?, ?, ?)', [
+                $vehicleId,
+                $validated['license_plate'],
+                $validated['model'],
+                $validated['year_of_manufacture'],
+                $validated['fuel_type'],
+                $validated['vehicle_type_id'],
+                $validated['remark'] ?? null,
+                $validated['instructor_id'] ?? null,
+            ]);
+        });
+
+        return redirect()
+            ->route('instructor.details', ['instructorId' => $instructorId])
+            ->with('status', 'Voertuiggegevens zijn gewijzigd.');
     }
 
     /**
